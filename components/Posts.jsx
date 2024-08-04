@@ -17,16 +17,9 @@ const Posts = () => {
   }, []);
 
   return (
-    <div className="mt-16">
+    <div className="flex-between flex-col gap-8">
       {posts.map((post) => (
-        <PostCard
-          key={post._id}
-          text={post.text}
-          code={post.code}
-          date={post.createdAt}
-          creator={post.creator}
-          codeLang={post.codeLang}
-        />
+        <PostCard key={post._id} post={post} />
       ))}
     </div>
   );

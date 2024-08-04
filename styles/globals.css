@@ -88,6 +88,14 @@
   @apply rounded-full bg-[#FF5722] py-1.5 px-5 text-white transition-all hover:bg-white hover:text-black text-center text-sm font-montserrat font-bold flex items-center justify-center;
 }
 
+.comment_btn {
+  @apply rounded-full bg-[#4CAF50] py-1.5 px-5 text-white transition-all hover:bg-[#388E3C] hover:text-black text-center text-sm font-montserrat font-bold flex items-center justify-center;
+}
+
+.cancel_btn {
+  @apply rounded-full bg-red-500 py-1.5 px-5 text-white transition-all hover:bg-red-700 hover:text-black text-center text-sm font-montserrat font-bold flex items-center justify-center;
+}
+
 .glowing-btn {
   @apply relative px-6 py-3 text-white bg-[#FF5722] rounded-md border-2 border-[#FF5722] font-semibold font-montserrat uppercase transition-all ease-in-out duration-300;
   box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
@@ -193,4 +201,34 @@
 
 .flex-between {
   @apply flex justify-between items-center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s forwards;
+}
+
+.animate-fadeOut {
+  animation: fadeOut 0.3s forwards;
 }
