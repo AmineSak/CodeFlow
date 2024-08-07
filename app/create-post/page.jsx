@@ -12,7 +12,7 @@ const CreatePostPage = () => {
   const [text, setText] = useState("");
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState(langs.javascript());
-  const [codeLang, setcodeLang] = useState("");
+  const [codeLang, setcodeLang] = useState("python");
   const langIcons = [
     "/assets/icons/js.svg",
     "/assets/icons/python.svg",
@@ -20,25 +20,29 @@ const CreatePostPage = () => {
   ];
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (text || code) {
+      e.preventDefault();
 
-    try {
-      const response = await fetch("/api/post/new", {
-        method: "POST",
-        body: JSON.stringify({
-          text: text,
-          userId: session?.user.id,
-          code: code,
-          codeLang: codeLang,
-        }),
-      });
+      try {
+        const response = await fetch("/api/post/new", {
+          method: "POST",
+          body: JSON.stringify({
+            text: text,
+            userId: session?.user.id,
+            code: code,
+            codeLang: codeLang,
+          }),
+        });
 
-      if (response.ok) {
-        router.push("/");
+        if (response.ok) {
+          router.push("/");
+        }
+      } catch (error) {
+        console.log(error);
+        alert("Failed to submit post :(");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to submit post :(");
+    } else {
+      alert("Form needs to be filled !");
     }
   };
   return (
@@ -47,7 +51,6 @@ const CreatePostPage = () => {
       <div className="flex-start w-full flex-col max-w-full">
         <h1 className="red_gradient head_text mb-10">Create Post</h1>
         <Form
-          handleSubmit={handleSubmit}
           setLanguage={setLanguage}
           text={text}
           langIcons={langIcons}

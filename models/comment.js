@@ -1,6 +1,6 @@
 import { Schema, models, model } from "mongoose";
 
-const postSchema = new Schema({
+const commentSchema = new Schema({
   text: {
     type: String,
     required: [true, "text is required!"],
@@ -8,6 +8,10 @@ const postSchema = new Schema({
   creator: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  post: {
+    type: Schema.Types.ObjectId,
+    ref: "Post",
   },
   code: {
     type: String,
@@ -38,6 +42,6 @@ const postSchema = new Schema({
   },
 });
 
-const Post = models.Post || model("Post", postSchema);
+const Comment = models.Comment || model("Comment", commentSchema);
 
-export default Post;
+export default Comment;

@@ -23,7 +23,7 @@ const Nav = () => {
 
   return (
     <nav className="flex-between w-full mb-16 pt-3 ">
-      <Link href="/" className="flex-center flex ">
+      <Link href="/feed" className="flex-center flex ">
         <Image
           src="/assets/images/CodeFlowLogo.svg"
           width={90}

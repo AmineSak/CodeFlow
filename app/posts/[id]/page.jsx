@@ -13,8 +13,7 @@ const page = ({ params }) => {
   const [post, setpost] = useState({});
   const searchParams = useSearchParams();
   const postId = searchParams.get("id");
-
-  const handleAddCommentBtn = () => {};
+  const [commentsKey, setCommentsKey] = useState(0); // Used to trigger a re-render of Comments
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -30,16 +29,27 @@ const page = ({ params }) => {
     fetchPost();
   }, []);
 
+  const refreshComments = () => {
+    setCommentsKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
+  };
+
   return (
     <>
       <Nav />
       {loading ? (
         <LoadingPost />
       ) : (
-        <div className="flex-between flex-col gap-2">
+        <div className="flex-between relative flex-col gap-2">
           <PostCard post={post} />
-          <PopupForm />
-          <Comments />
+          <PopupForm
+            className="absolute z-10 inset-0"
+            onCommentSubmit={refreshComments}
+          />
+          <Comments
+            postId={postId}
+            key={commentsKey}
+            className="relative z-0"
+          />
         </div>
       )}
     </>

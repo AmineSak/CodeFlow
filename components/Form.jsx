@@ -9,7 +9,6 @@ import { darcula } from "@uiw/codemirror-theme-darcula";
 import { langs } from "@uiw/codemirror-extensions-langs";
 
 const Form = ({
-  handleSubmit,
   language,
   setLanguage,
   text,
@@ -24,13 +23,10 @@ const Form = ({
   const [jsBg, setjsBg] = useState("bg-transparent");
 
   return (
-    <form
-      className="mt-10 flex-col glassmorphism w-[75%]"
-      onSubmit={handleSubmit}
-    >
+    <form className="mt-10 flex-col glassmorphism w-[75%]">
       <Image
         src="/assets/icons/textLogo.svg"
-        alt="text logo "
+        alt="text-logo "
         width={25}
         height={25}
       />
