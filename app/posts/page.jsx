@@ -1,11 +1,11 @@
 import Nav from "@/components/Nav";
-import Posts from "@/components/Posts";
+import Feed from "@/components/Feed";
 
 const PostsPage = () => {
   return (
     <>
       <Nav />
-      <Posts />
+      <Feed />
     </>
   );
 };

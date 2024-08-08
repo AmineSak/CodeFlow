@@ -36,12 +36,6 @@ const Nav = () => {
         </p>
       </Link>
       <div className="flex-between gap-[40px]">
-        <Link
-          href="/posts"
-          className="font-montserrat font-semibold text-white"
-        >
-          Posts
-        </Link>
         <button
           className={`font-montserrat font-semibold  ${
             postsBtnOn ? "text-blue-700" : "text-white"
@@ -53,12 +47,6 @@ const Nav = () => {
         >
           Posts
         </button>
-        <Link
-          href="/posts"
-          className="font-montserrat font-semibold text-white"
-        >
-          Posts
-        </Link>
       </div>
       <div className="flex">
         <div className="flex gap-3 md:gap-5">

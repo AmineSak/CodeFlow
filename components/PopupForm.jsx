@@ -26,7 +26,7 @@ const PopupForm = ({ onCommentSubmit }) => {
       e.preventDefault();
 
       try {
-        const response = await fetch("/api/post/comment/new", {
+        const response = await fetch("/api/post/comments/new", {
           method: "POST",
           body: JSON.stringify({
             text: text,

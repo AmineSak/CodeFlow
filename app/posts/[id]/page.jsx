@@ -8,7 +8,7 @@ import LoadingPost from "@/components/LoadingPost";
 import Comments from "@/components/Comments";
 import PopupForm from "@/components/PopupForm";
 
-const page = ({ params }) => {
+const page = () => {
   const [loading, setloading] = useState(true);
   const [post, setpost] = useState({});
   const searchParams = useSearchParams();

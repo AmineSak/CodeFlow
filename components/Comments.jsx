@@ -7,7 +7,7 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const response = await fetch(`/api/post/comment/${postId}`);
+      const response = await fetch(`/api/post/comments/${postId}`);
       const data = await response.json();
       if (!response.ok) {
         throw new Error("Network response was not ok");
