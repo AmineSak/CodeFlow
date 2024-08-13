@@ -47,6 +47,17 @@ const Nav = () => {
         >
           Posts
         </button>
+        <button
+          className={`font-montserrat font-semibold  ${
+            postsBtnOn ? "text-blue-700" : "text-white"
+          }`}
+          onClick={() => {
+            setpostsBtnOn(!postsBtnOn);
+            router.push("/contact");
+          }}
+        >
+          Contact
+        </button>
       </div>
       <div className="flex">
         <div className="flex gap-3 md:gap-5">

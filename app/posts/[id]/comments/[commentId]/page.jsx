@@ -44,7 +44,10 @@ const page = () => {
       {IsLoading ? (
         <LoadingPost /> // Optional: You can show a loading spinner here
       ) : (
-        <CommentCard comment={comment} />
+        <div className="flex-center flex-col gap-7">
+          <CommentCard comment={comment} />
+          <button className="comment_btn ">Reply</button>
+        </div>
       )}
     </>
   );

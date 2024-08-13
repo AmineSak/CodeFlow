@@ -1,13 +1,58 @@
 import { CodeBlock } from "./CodeBlock";
 import Image from "next/image";
-import Link from "next/link";
+
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import ReplyCard from "./ReplyCard";
 
 const CommentCard = ({ comment }) => {
   const { data: session } = useSession();
 
   const [commentUpVotes, setcommentUpVotes] = useState(comment.upvotes);
+  const [showReplies, setShowReplies] = useState(false);
+  const [replies, setReplies] = useState(comment.replies || []);
+  const [newReply, setNewReply] = useState("");
+
+  const toggleReplies = () => {
+    setShowReplies(!showReplies);
+  };
+
+  const handleReplyChange = (e) => {
+    setNewReply(e.target.value);
+  };
+
+  const handleAddReply = async (e) => {
+    e.preventDefault();
+
+    if (newReply.trim()) {
+      try {
+        const response = await fetch(`/api/post/comment/${comment._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Set the content type to JSON
+          },
+          body: JSON.stringify({
+            replyText: newReply,
+            userId: session.user.id,
+          }),
+        });
+
+        if (response.ok) {
+          const updatedComment = await response.json(); // Parse the updated comment from the response
+          console.log(updatedComment);
+          const newReplyData =
+            updatedComment.replies[updatedComment.replies.length - 1]; // Get the newly added reply
+
+          setReplies([...replies, newReplyData]); // Add the new reply object to the state
+          setNewReply(""); // Clear the input field
+        } else {
+          console.error(`Failed to add reply: ${response.statusText}`);
+        }
+      } catch (error) {
+        console.error("Error while adding reply:", error);
+      }
+    }
+  };
 
   const handleDownVote = async () => {
     const updatedUpVotes = commentUpVotes - 1;
@@ -59,6 +104,7 @@ const CommentCard = ({ comment }) => {
       setcommentUpVotes((prev) => prev - 1);
     }
   };
+
   return (
     <div className="glassmorphism max-w-full w-full text-white text-3xl">
       <div className="flex-between gap-[400px] w-full max-w-full">
@@ -107,18 +153,42 @@ const CommentCard = ({ comment }) => {
         </div>
       )}
       <div className="border-t-4 border-[#80808080] p-3 w-full max-w-full gap-2 flex-center">
-        <Link
-          href={`/posts/${comment.post}/comments/comment?commentId=${comment._id}`}
-        >
-          <Image
-            src="/assets/icons/reply.svg"
-            width={30}
-            height={30}
-            className=" hover:bg-[#80808080] rounded-md"
-          />
-        </Link>
+        <Image
+          src="/assets/icons/reply.svg"
+          width={30}
+          height={30}
+          onClick={toggleReplies}
+          className=" hover:bg-[#80808080] rounded-md"
+        />
 
-        <p className="font-sourceCodePro text-sm text-center">0</p>
+        <p className="font-sourceCodePro text-sm text-center">
+          {comment.replies.length}
+        </p>
+      </div>
+      <div
+        className={`transition-max-height duration-300 ease-in-out overflow-hidden ${
+          showReplies ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="mt-1 border-t border-gray-[#808080] pt-4">
+          <div className="mb-2 flex-center gap-1 flex w-full">
+            <textarea
+              value={newReply}
+              onChange={handleReplyChange}
+              placeholder="Add a reply..."
+              className="w-full p-2 flex bg-[#1E1E1E] rounded-lg  text-sm text-gray-500 outline-0 mt-1 h-[40px]"
+            />
+
+            <button onClick={handleAddReply} className="mt-2 comment_btn">
+              Reply
+            </button>
+          </div>
+          <div className="overflow-y-auto max-h-[300px] mt-4">
+            {replies.map((reply) => (
+              <ReplyCard key={reply._id} reply={reply} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
