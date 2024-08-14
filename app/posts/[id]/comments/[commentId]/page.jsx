@@ -40,6 +40,7 @@ const page = () => {
 
   return (
     <>
+      <Nav />
       {IsLoading ? (
         <LoadingPost /> // Optional: You can show a loading spinner here
       ) : (

@@ -29,7 +29,11 @@ const Nav = () => {
   }, []);
 
   return (
-    <Navbar shouldHideOnScroll isBordered className="bg-[rgba(30,30,30,0.8)] ">
+    <Navbar
+      shouldHideOnScroll
+      isBordered
+      className="bg-[rgba(30,30,30,0.8)] w-screen "
+    >
       <NavbarBrand>
         <Link href="/feed" color="foreground" className="flex-center flex ">
           <Image

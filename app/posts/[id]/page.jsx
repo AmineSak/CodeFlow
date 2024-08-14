@@ -35,6 +35,7 @@ const page = () => {
 
   return (
     <>
+      <Nav />
       {loading ? (
         <LoadingPost />
       ) : (
