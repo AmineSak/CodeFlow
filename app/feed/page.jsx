@@ -10,7 +10,6 @@ const Feed = () => {
 
   return (
     <>
-      <Nav />
       <WelcomeMessage name={session?.user.name} />
       <button type="button" className="glowing-btn mt-20">
         {" "}

@@ -4,7 +4,6 @@ import Feed from "@/components/Feed";
 const PostsPage = () => {
   return (
     <>
-      <Nav />
       <Feed />
     </>
   );

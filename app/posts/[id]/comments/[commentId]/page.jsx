@@ -40,11 +40,10 @@ const page = () => {
 
   return (
     <>
-      <Nav />
       {IsLoading ? (
         <LoadingPost /> // Optional: You can show a loading spinner here
       ) : (
-        <div className="flex-center flex-col gap-7">
+        <div className="flex-center flex-col max-w-[640px] gap-7">
           <CommentCard comment={comment} />
           <button className="comment_btn ">Reply</button>
         </div>

@@ -35,11 +35,10 @@ const page = () => {
 
   return (
     <>
-      <Nav />
       {loading ? (
         <LoadingPost />
       ) : (
-        <div className="flex-between relative flex-col gap-2">
+        <div className="flex-between relative w-[640px] mt-8 flex-col gap-2">
           <PostCard post={post} />
           <PopupForm
             className="absolute z-10 inset-0"

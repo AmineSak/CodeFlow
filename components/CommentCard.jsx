@@ -10,7 +10,7 @@ const CommentCard = ({ comment }) => {
 
   const [commentUpVotes, setcommentUpVotes] = useState(comment.upvotes);
   const [showReplies, setShowReplies] = useState(false);
-  const [replies, setReplies] = useState(comment.replies || []);
+  const [replies, setReplies] = useState(comment.replies);
   const [newReply, setNewReply] = useState("");
 
   const toggleReplies = () => {
@@ -106,8 +106,8 @@ const CommentCard = ({ comment }) => {
   };
 
   return (
-    <div className="glassmorphism max-w-full w-full text-white text-3xl">
-      <div className="flex-between gap-[400px] w-full max-w-full">
+    <div className="glassmorphism max-w-full w-[640px] text-white text-3xl">
+      <div className="flex-between w-[640px] max-w-full">
         <div className="flex-between gap-3">
           <Image
             src={comment.creator?.image}

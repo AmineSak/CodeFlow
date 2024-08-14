@@ -44,7 +44,6 @@ const ContactPage = () => {
 
   return (
     <>
-      <Nav />
       <div className="flex-start w-full flex-col max-w-full">
         <h1 className="red_gradient head_text mb-10">Contact</h1>
         <p className="font-montserrat text-white text-sm ">

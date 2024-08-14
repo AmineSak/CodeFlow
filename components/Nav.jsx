@@ -4,12 +4,19 @@ import Link from "next/link";
 import Image from "next/image";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback } from "react";
+
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+} from "@nextui-org/navbar";
+import { Button } from "@nextui-org/react";
 
 const Nav = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [postsBtnOn, setpostsBtnOn] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -22,49 +29,51 @@ const Nav = () => {
   }, []);
 
   return (
-    <nav className="flex-between w-full mb-16 pt-3 ">
-      <Link href="/feed" className="flex-center flex ">
-        <Image
-          src="/assets/images/CodeFlowLogo.svg"
-          width={90}
-          height={80}
-          alt="logo"
-          className="object-contain"
-        />
-        <p className="font-sourceCodePro text-3xl font-semibold bg-clip-padding text-[#545454] hover:text-gray-400">
-          CodeFlow
-        </p>
-      </Link>
-      <div className="flex-between gap-[40px]">
-        <button
-          className={`font-montserrat font-semibold  ${
-            postsBtnOn ? "text-blue-700" : "text-white"
-          }`}
-          onClick={() => {
-            setpostsBtnOn(!postsBtnOn);
-            router.push("/posts");
-          }}
-        >
-          Posts
-        </button>
-        <button
-          className={`font-montserrat font-semibold  ${
-            postsBtnOn ? "text-blue-700" : "text-white"
-          }`}
-          onClick={() => {
-            setpostsBtnOn(!postsBtnOn);
-            router.push("/contact");
-          }}
-        >
-          Contact
-        </button>
-      </div>
-      <div className="flex">
-        <div className="flex gap-3 md:gap-5">
-          <button type="button" onClick={handleSignOut} className="login_btn">
-            Sign Out{" "}
-          </button>
-          {session?.user?.image && (
+    <Navbar shouldHideOnScroll isBordered className="bg-[rgba(30,30,30,0.8)] ">
+      <NavbarBrand>
+        <Link href="/feed" color="foreground" className="flex-center flex ">
+          <Image
+            src="/assets/images/CodeFlowLogo.svg"
+            width={90}
+            height={80}
+            alt="logo"
+            className="object-contain"
+          />
+          <p className="font-sourceCodePro text-3xl font-semibold bg-clip-padding text-[#545454] hover:text-gray-400">
+            CodeFlow
+          </p>
+        </Link>
+      </NavbarBrand>
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarItem>
+          <Link
+            className="text-white font-montserrat font-semibold"
+            href="/posts"
+          >
+            Posts
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link
+            href="/contact"
+            className="text-white font-montserrat font-semibold"
+          >
+            Contact
+          </Link>
+        </NavbarItem>
+      </NavbarContent>
+      <NavbarContent justify="end">
+        <NavbarItem>
+          <Button
+            onClick={handleSignOut}
+            className="login_btn border-none"
+            variant="ghost"
+          >
+            Sign out
+          </Button>
+        </NavbarItem>
+        {session?.user?.image && (
+          <NavbarItem>
             <Link href="/profile">
               <Image
                 src={session.user.image}
@@ -74,10 +83,10 @@ const Nav = () => {
                 className="rounded-full"
               />
             </Link>
-          )}
-        </div>
-      </div>
-    </nav>
+          </NavbarItem>
+        )}
+      </NavbarContent>
+    </Navbar>
   );
 };
 

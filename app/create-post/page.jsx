@@ -47,7 +47,6 @@ const CreatePostPage = () => {
   };
   return (
     <>
-      <Nav />
       <div className="flex-start w-full flex-col max-w-full">
         <h1 className="red_gradient head_text mb-10">Create Post</h1>
         <Form

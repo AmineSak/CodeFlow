@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import PostCard from "./PostCard";
+import { Input } from "@nextui-org/react";
+import { Search } from "lucide-react";
 
 const PostCardList = ({ data }) => {
   return (
-    <div className="flex-between flex-col gap-8">
+    <div className="fle flex-col flex-between gap-8 max-w-[640px]">
       {data.map((post) => (
         <PostCard key={post._id} post={post} />
       ))}
@@ -45,15 +47,22 @@ const Feed = () => {
   }, []);
 
   return (
-    <>
-      <form className="relative w-full flex-center">
-        <input
-          type="text"
-          placeholder="Search for a post or a username "
+    <div className="flex-between flex-col">
+      <form className="relative">
+        <Input
+          classNames={{
+            base: "max-w-full sm:max-w-[10rem] mt-8 mb-8 h-10 flex-center ",
+            mainWrapper: "h-full",
+            input: "text-medium",
+            inputWrapper:
+              "h-full font-normal w-[300px] text-default-500 bg-default-400/20 dark:bg-default-500/20",
+          }}
+          placeholder="Search for a post or a username... "
+          size="lg"
+          startContent={<Search size={18} />}
+          type="search"
           value={searchText}
           onChange={handleSearchChange}
-          required
-          className="search_input mt-8 mb-8"
         />
       </form>
       {searchText ? (
@@ -61,7 +70,7 @@ const Feed = () => {
       ) : (
         <PostCardList data={posts} />
       )}
-    </>
+    </div>
   );
 };
 
