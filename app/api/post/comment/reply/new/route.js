@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server";
 import Reply from "@/models/reply";
 import { connectToDB } from "@/utils/database";
 
-export const POST = async (request) => {
+export async function POST(request) {
   try {
     const { text, creator, comment } = await request.json();
     await connectToDB();
@@ -15,9 +16,12 @@ export const POST = async (request) => {
     const newReply = new Reply(replyData);
     await newReply.save();
 
-    return new Response(JSON.stringify(newReply), { status: 201 });
+    return NextResponse.json(newReply, { status: 201 });
   } catch (error) {
     console.error("Error:", error);
-    return new Response("Failed to create reply", { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to create reply" },
+      { status: 500 }
+    );
   }
-};
+}

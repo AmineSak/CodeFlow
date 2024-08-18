@@ -1,37 +1,42 @@
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Post from "@/models/post";
 
-export const GET = async (request, { params }) => {
+// GET request to fetch a specific post
+export async function GET(request, { params }) {
   try {
     await connectToDB();
     const post = await Post.findById(params.id).populate({
       path: "creator",
       select: "username image",
     });
-    if (!post) return new Response("post not found", { status: 404 });
 
-    return new Response(JSON.stringify(post), {
-      status: 200,
-    });
-  } catch {
-    console.error("Failed to fetch posts: ", error);
-    return new Response("Failed to fetch post", { status: 500 });
+    if (!post) {
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(post, { status: 200 });
+  } catch (error) {
+    console.error("Failed to fetch post:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch post" },
+      { status: 500 }
+    );
   }
-};
+}
 
-// PATCH
-export const PATCH = async (req, { params }) => {
-  const { upvotes, userId, voteValue } = await req.json();
-
+// PATCH request to update a post's upvotes and votes
+export async function PATCH(request, { params }) {
   try {
+    const { upvotes, userId, voteValue } = await request.json();
     await connectToDB();
     const postToUpdate = await Post.findById(params.id);
 
     if (!postToUpdate) {
-      return new Response("Post not found", { status: 404 });
+      return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const userVote = await postToUpdate.votes.find(
+    const userVote = postToUpdate.votes.find(
       (vote) => vote.userId.toString() === userId.toString()
     );
 
@@ -41,14 +46,20 @@ export const PATCH = async (req, { params }) => {
           userVote.vote++;
           postToUpdate.upvotes = upvotes;
         } else {
-          return new Response("User reached max votes", { status: 500 });
+          return NextResponse.json(
+            { error: "User reached max votes" },
+            { status: 400 }
+          );
         }
       } else {
         if (userVote.vote >= 0) {
           userVote.vote--;
           postToUpdate.upvotes = upvotes;
         } else {
-          return new Response("User reached max votes", { status: 500 });
+          return NextResponse.json(
+            { error: "User reached max votes" },
+            { status: 400 }
+          );
         }
       }
     } else {
@@ -58,9 +69,12 @@ export const PATCH = async (req, { params }) => {
 
     await postToUpdate.save();
 
-    return new Response(JSON.stringify(postToUpdate), { status: 200 });
+    return NextResponse.json(postToUpdate, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return new Response("Failed to update post", { status: 500 });
+    console.error("Failed to update post:", error);
+    return NextResponse.json(
+      { error: "Failed to update post" },
+      { status: 500 }
+    );
   }
-};
+}

@@ -1,7 +1,9 @@
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
-export const GET = async (req, { params }) => {
+// GET request to fetch comments for a specific post
+export async function GET(req, { params }) {
   try {
     await connectToDB();
     const comments = await Comment.find({ post: params.id })
@@ -11,26 +13,28 @@ export const GET = async (req, { params }) => {
       })
       .sort({ upvotes: -1, createdAt: -1 });
 
-    return new Response(JSON.stringify(comments), { status: 200 });
+    return NextResponse.json(comments, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch comments: ", error);
-    return new Response("Failed to fetch comments", { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch comments" },
+      { status: 500 }
+    );
   }
-};
+}
 
-// PATCH
-export const PATCH = async (req, { params }) => {
-  const { upvotes, userId, voteValue } = await req.json();
-
+// PATCH request to update a comment's upvotes and votes
+export async function PATCH(req, { params }) {
   try {
+    const { upvotes, userId, voteValue } = await req.json();
     await connectToDB();
-    const commentToUpdate = await Comment.findById(params.id);
 
+    const commentToUpdate = await Comment.findById(params.id);
     if (!commentToUpdate) {
-      return new Response("Comment not found", { status: 404 });
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
     }
 
-    const userVote = await commentToUpdate.votes.find(
+    const userVote = commentToUpdate.votes.find(
       (vote) => vote.userId.toString() === userId.toString()
     );
 
@@ -40,14 +44,20 @@ export const PATCH = async (req, { params }) => {
           userVote.vote++;
           commentToUpdate.upvotes = upvotes;
         } else {
-          return new Response("User reached max votes", { status: 500 });
+          return NextResponse.json(
+            { error: "User reached max votes" },
+            { status: 400 }
+          );
         }
       } else {
         if (userVote.vote >= 0) {
           userVote.vote--;
           commentToUpdate.upvotes = upvotes;
         } else {
-          return new Response("User reached max votes", { status: 500 });
+          return NextResponse.json(
+            { error: "User reached max votes" },
+            { status: 400 }
+          );
         }
       }
     } else {
@@ -57,9 +67,12 @@ export const PATCH = async (req, { params }) => {
 
     await commentToUpdate.save();
 
-    return new Response(JSON.stringify(commentToUpdate), { status: 200 });
+    return NextResponse.json(commentToUpdate, { status: 200 });
   } catch (error) {
-    console.log(error);
-    return new Response("Failed to update comment", { status: 500 });
+    console.error("Failed to update comment:", error);
+    return NextResponse.json(
+      { error: "Failed to update comment" },
+      { status: 500 }
+    );
   }
-};
+}

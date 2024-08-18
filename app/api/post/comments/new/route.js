@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
-export const POST = async (request) => {
+export async function POST(request) {
   try {
     const { text, userId, code, codeLang, postId } = await request.json();
     await connectToDB();
@@ -19,11 +20,14 @@ export const POST = async (request) => {
     };
 
     const newComment = new Comment(commentData);
-
     await newComment.save();
 
-    return new Response(JSON.stringify(newComment), { status: 201 });
+    return NextResponse.json(newComment, { status: 201 });
   } catch (error) {
-    return new Response("Failed to create Comment", { status: 500 });
+    console.error("Error:", error);
+    return NextResponse.json(
+      { error: "Failed to create comment" },
+      { status: 500 }
+    );
   }
-};
+}

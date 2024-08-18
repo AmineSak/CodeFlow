@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Reply from "@/models/reply";
 
-export const GET = async (req, { params }) => {
+export async function GET(req, { params }) {
   try {
     await connectToDB();
     const replies = await Reply.find({ comment: params.commentId })
@@ -10,9 +11,13 @@ export const GET = async (req, { params }) => {
         select: "username image",
       })
       .exec();
-    return new Response(JSON.stringify(replies), { status: 200 });
+
+    return NextResponse.json(replies, { status: 200 });
   } catch (error) {
-    console.error("Failed to fetch replies: ", error);
-    return new Response("Failed to fetch replies", { status: 500 });
+    console.error("Failed to fetch replies:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch replies" },
+      { status: 500 }
+    );
   }
-};
+}

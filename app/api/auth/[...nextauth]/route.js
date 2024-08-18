@@ -4,7 +4,6 @@ import GoogleProvider from "next-auth/providers/google";
 
 import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
-import { signIn } from "next-auth/react";
 
 const authOptions = {
   providers: [
@@ -19,10 +18,17 @@ const authOptions = {
   ],
   callbacks: {
     async session({ session }) {
-      const sessionUser = await User.findOne({ email: session.user.email });
-      session.user.id = sessionUser._id.toString();
-
-      return session;
+      try {
+        await connectToDB();
+        const sessionUser = await User.findOne({ email: session.user.email });
+        if (sessionUser) {
+          session.user.id = sessionUser._id.toString();
+        }
+        return session;
+      } catch (error) {
+        console.error("Error fetching session user:", error);
+        return session;
+      }
     },
     async signIn({ user }) {
       try {
@@ -40,7 +46,7 @@ const authOptions = {
         }
         return true;
       } catch (error) {
-        console.log("Error checking if user exists: ", error.message);
+        console.error("Error checking if user exists:", error.message);
         return false;
       }
     },
