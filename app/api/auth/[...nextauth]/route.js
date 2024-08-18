@@ -6,6 +6,9 @@ import { connectToDB } from "@/utils/database";
 import User from "@/models/user";
 
 const authOptions = {
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID,
@@ -18,36 +21,31 @@ const authOptions = {
   ],
   callbacks: {
     async session({ session }) {
-      try {
-        await connectToDB();
-        const sessionUser = await User.findOne({ email: session.user.email });
-        if (sessionUser) {
-          session.user.id = sessionUser._id.toString();
-        }
-        return session;
-      } catch (error) {
-        console.error("Error fetching session user:", error);
-        return session;
-      }
+      const sessionUser = await User.findOne({
+        email: session.user.email,
+      });
+
+      session.user.id = sessionUser._id.toString();
+
+      return session;
     },
+
     async signIn({ user }) {
       try {
         await connectToDB();
 
-        const userExists = await User.findOne({ email: user.email });
+        const userExists = await User?.findOne({ email: user.email });
 
         if (!userExists) {
-          const newUser = new User({
-            username: user.name,
-            email: user.email,
-            image: user.image,
+          await User.create({
+            email: profile.email,
+            username: profile.name.replace(" ", "").toLowerCase(),
+            image: profile.picture,
           });
-          await newUser.save();
         }
         return true;
       } catch (error) {
-        console.error("Error checking if user exists:", error.message);
-        return false;
+        console.log(error);
       }
     },
   },

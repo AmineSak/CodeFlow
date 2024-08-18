@@ -21,7 +21,7 @@ const page = () => {
       const response = await fetch(`/api/post/${postId}`);
       const data = await response.json();
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        console.log(`HTTP error! status: ${response.status}`);
       }
       setpost(data);
       setloading(false);
