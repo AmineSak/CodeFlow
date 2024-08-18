@@ -17,6 +17,7 @@ export const POST = async (request) => {
 
     return new Response(JSON.stringify(newReply), { status: 201 });
   } catch (error) {
+    console.error("Error:", error);
     return new Response("Failed to create reply", { status: 500 });
   }
 };
