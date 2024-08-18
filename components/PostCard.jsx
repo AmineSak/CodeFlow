@@ -102,9 +102,12 @@ const PostCard = ({ post }) => {
         </div>
       </div>
       <div className="mt-5 font-inter text-lg ">{post.text}</div>
-      <div className="container mx-auto py-10 text-sm">
-        <CodeBlock code={post.code} language={post.codeLang} />
-      </div>
+      {post.code && (
+        <div className="container mx-auto py-10 text-sm">
+          <CodeBlock code={post.code} language={post.codeLang} />
+        </div>
+      )}
+
       <div className="border-t-4 border-[#80808080] p-3 w-full max-w-full gap-2 flex-center">
         <Link href={`/posts/post?id=${post._id}`}>
           <Image
