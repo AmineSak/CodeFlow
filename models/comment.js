@@ -1,10 +1,5 @@
 import { Schema, models, model } from "mongoose";
 
-const ReplySchema = new Schema({
-  text: { type: String, required: true },
-  creator: { type: Schema.Types.ObjectId, ref: "User", required: true },
-});
-
 const commentSchema = new Schema({
   text: {
     type: String,
@@ -45,7 +40,6 @@ const commentSchema = new Schema({
     ],
     default: [], // This ensures that the votes array starts as an empty array
   },
-  replies: [ReplySchema],
 });
 
 const Comment = models.Comment || model("Comment", commentSchema);

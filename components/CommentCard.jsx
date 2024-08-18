@@ -1,7 +1,7 @@
 import { CodeBlock } from "./CodeBlock";
 import Image from "next/image";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import ReplyCard from "./ReplyCard";
 
@@ -10,8 +10,25 @@ const CommentCard = ({ comment }) => {
 
   const [commentUpVotes, setcommentUpVotes] = useState(comment.upvotes);
   const [showReplies, setShowReplies] = useState(false);
-  const [replies, setReplies] = useState(comment.replies);
+  const [replies, setReplies] = useState([]);
   const [newReply, setNewReply] = useState("");
+  const [shownReplies, setshownReplies] = useState([]);
+  useEffect(() => {
+    const fetchReplies = async () => {
+      try {
+        const response = await fetch(`/api/post/comment/reply/${comment._id}`);
+        if (response.ok) {
+          const fetchedReplies = await response.json();
+          setReplies(fetchedReplies);
+        }
+      } catch (error) {
+        console.error("Error while fetching reply:", error);
+      }
+    };
+    if (comment._id) {
+      fetchReplies();
+    }
+  }, []);
 
   const toggleReplies = () => {
     setShowReplies(!showReplies);
@@ -21,36 +38,32 @@ const CommentCard = ({ comment }) => {
     setNewReply(e.target.value);
   };
 
-  const handleAddReply = async (e) => {
-    e.preventDefault();
-
-    if (newReply.trim()) {
+  const handleAddReply = async () => {
+    if (newReply) {
       try {
-        const response = await fetch(`/api/post/comment/${comment._id}`, {
+        const response = await fetch("/api/post/comment/reply/new", {
           method: "POST",
           headers: {
-            "Content-Type": "application/json", // Set the content type to JSON
+            "Content-Type": "application/json", // Specify content type
           },
           body: JSON.stringify({
-            replyText: newReply,
-            userId: session.user.id,
+            text: newReply,
+            creator: session?.user.id,
+            comment: comment._id,
           }),
         });
 
         if (response.ok) {
-          const updatedComment = await response.json(); // Parse the updated comment from the response
-          console.log(updatedComment);
-          const newReplyData =
-            updatedComment.replies[updatedComment.replies.length - 1]; // Get the newly added reply
-
-          setReplies([...replies, newReplyData]); // Add the new reply object to the state
-          setNewReply(""); // Clear the input field
+          setshownReplies((prev) => [...prev, newReply]);
+          setNewReply("");
         } else {
           console.error(`Failed to add reply: ${response.statusText}`);
         }
       } catch (error) {
         console.error("Error while adding reply:", error);
       }
+    } else {
+      console.warn("Reply text cannot be empty.");
     }
   };
 
@@ -162,7 +175,7 @@ const CommentCard = ({ comment }) => {
         />
 
         <p className="font-sourceCodePro text-sm text-center">
-          {comment.replies.length}
+          {replies.length}
         </p>
       </div>
       <div
@@ -186,6 +199,14 @@ const CommentCard = ({ comment }) => {
           <div className="overflow-y-auto max-h-[300px] mt-4">
             {replies.map((reply) => (
               <ReplyCard key={reply._id} reply={reply} />
+            ))}
+            {shownReplies.map((replyText) => (
+              <ReplyCard
+                reply={{
+                  text: replyText,
+                  creator: session?.user,
+                }}
+              />
             ))}
           </div>
         </div>

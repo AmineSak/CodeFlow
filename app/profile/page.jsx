@@ -3,8 +3,9 @@ import Image from "next/image";
 
 const ProfilePage = () => {
   return (
-    <div className="w-full max-w-full">
+    <>
       <Nav />
+
       <div className="flex-center flex-col">
         <Image
           src="/assets/icons/loader.svg"
@@ -18,7 +19,7 @@ const ProfilePage = () => {
           Coming Soon...
         </h1>
       </div>
-    </div>
+    </>
   );
 };
 

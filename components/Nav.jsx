@@ -30,8 +30,8 @@ const Nav = () => {
 
   return (
     <Navbar
-      shouldHideOnScroll
       isBordered
+      shouldHideOnScroll
       className="bg-[rgba(30,30,30,0.8)] w-screen "
     >
       <NavbarBrand>

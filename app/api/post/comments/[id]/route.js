@@ -1,7 +1,7 @@
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
-export const GET = async (request, { params }) => {
+export const GET = async (req, { params }) => {
   try {
     await connectToDB();
     const comments = await Comment.find({ post: params.id })
@@ -12,7 +12,7 @@ export const GET = async (request, { params }) => {
       .sort({ upvotes: -1, createdAt: -1 });
 
     return new Response(JSON.stringify(comments), { status: 200 });
-  } catch {
+  } catch (error) {
     console.error("Failed to fetch comments: ", error);
     return new Response("Failed to fetch comments", { status: 500 });
   }

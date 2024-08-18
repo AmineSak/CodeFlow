@@ -15,7 +15,7 @@ const ReplyCard = ({ reply }) => {
         />
 
         <p className="font-inter text-sm text-white p-2">
-          {reply.creator?.username || "Anonymous"}
+          {reply.creator?.username || reply.creator?.name}
         </p>
       </div>
       <div className="text-white text-sm p-2 bg-[#80808080] w-full rounded-md">
