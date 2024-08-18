@@ -38,9 +38,9 @@ const authOptions = {
 
         if (!userExists) {
           await User.create({
-            email: profile.email,
-            username: profile.name.replace(" ", "").toLowerCase(),
-            image: profile.picture,
+            email: user.email,
+            username: user.name.replace(" ", "").toLowerCase(),
+            image: user.picture,
           });
         }
         return true;
