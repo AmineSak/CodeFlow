@@ -38,9 +38,16 @@ const Feed = () => {
 
   useEffect(() => {
     const fetchPosts = async () => {
-      const response = await fetch("/api/post");
-      const data = await response.json();
-      setposts(data);
+      try {
+        const response = await fetch("/api/post");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch posts: ${response.statusText}`);
+        }
+        const data = await response.json();
+        setposts(data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      }
     };
 
     fetchPosts();
