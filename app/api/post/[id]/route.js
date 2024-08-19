@@ -16,7 +16,8 @@ export async function GET(request, { params }) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
 
     return NextResponse.json(post, { status: 200 });

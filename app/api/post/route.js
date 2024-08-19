@@ -19,7 +19,9 @@ export async function GET() {
         return { ...post.toObject(), commentCount };
       })
     );
-    revalidatePath("/post");
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
+    revalidatePath(path);
 
     return NextResponse.json(updatedPosts, { status: 200 });
   } catch (error) {

@@ -13,7 +13,8 @@ export async function GET(request, { params }) {
     if (!comment) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 });
     }
-    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
 
     return NextResponse.json(comment.toObject(), { status: 200 });

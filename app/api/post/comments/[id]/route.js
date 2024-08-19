@@ -13,7 +13,8 @@ export async function GET(req, { params }) {
       })
       .sort({ upvotes: -1, createdAt: -1 });
 
-    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
     return NextResponse.json(comments, { status: 200 });
   } catch (error) {

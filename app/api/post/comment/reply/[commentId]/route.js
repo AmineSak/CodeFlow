@@ -12,7 +12,8 @@ export async function GET(req, { params }) {
       })
       .exec();
 
-    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
 
     return NextResponse.json(replies, { status: 200 });
