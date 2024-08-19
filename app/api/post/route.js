@@ -4,7 +4,7 @@ import Post from "@/models/post";
 import Comment from "@/models/comment";
 import { revalidatePath } from "next/cache";
 
-export async function GET() {
+export async function GET(request) {
   try {
     await connectToDB();
     const posts = await Post.find({})

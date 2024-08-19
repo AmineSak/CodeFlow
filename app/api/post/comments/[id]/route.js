@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
 // GET request to fetch comments for a specific post
-export async function GET(req, { params }) {
+export async function GET(request, { params }) {
   try {
     await connectToDB();
     const comments = await Comment.find({ post: params.id })
