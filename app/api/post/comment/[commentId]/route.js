@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
@@ -13,6 +13,8 @@ export async function GET(request, { params }) {
     if (!comment) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 });
     }
+    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    revalidatePath(path);
 
     return NextResponse.json(comment.toObject(), { status: 200 });
   } catch (error) {

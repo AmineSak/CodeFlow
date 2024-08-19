@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Comment from "@/models/comment";
 
@@ -13,6 +13,8 @@ export async function GET(req, { params }) {
       })
       .sort({ upvotes: -1, createdAt: -1 });
 
+    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    revalidatePath(path);
     return NextResponse.json(comments, { status: 200 });
   } catch (error) {
     console.error("Failed to fetch comments: ", error);

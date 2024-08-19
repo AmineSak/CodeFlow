@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Post from "@/models/post";
+import { revalidatePath } from "next/cache";
 
 // GET request to fetch a specific post
 export async function GET(request, { params }) {
@@ -14,6 +15,9 @@ export async function GET(request, { params }) {
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
+
+    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    revalidatePath(path);
 
     return NextResponse.json(post, { status: 200 });
   } catch (error) {

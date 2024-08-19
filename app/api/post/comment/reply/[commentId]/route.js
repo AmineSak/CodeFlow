@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Reply from "@/models/reply";
 
@@ -11,6 +11,9 @@ export async function GET(req, { params }) {
         select: "username image",
       })
       .exec();
+
+    const path = NextRequest.nextUrl.searchParams.get("path") || "/";
+    revalidatePath(path);
 
     return NextResponse.json(replies, { status: 200 });
   } catch (error) {

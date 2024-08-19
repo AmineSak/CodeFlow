@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Post from "@/models/post";
 import Comment from "@/models/comment";
+import { revalidatePath } from "next/cache";
 
 export async function GET() {
   try {
@@ -18,6 +19,7 @@ export async function GET() {
         return { ...post.toObject(), commentCount };
       })
     );
+    revalidatePath("/post");
 
     return NextResponse.json(updatedPosts, { status: 200 });
   } catch (error) {
