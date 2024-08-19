@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Reply from "@/models/reply";
+import { revalidatePath } from "next/cache";
 
 export async function GET(req, { params }) {
   try {
