@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/database";
 import Reply from "@/models/reply";
 import { revalidatePath } from "next/cache";
 
-export async function GET(req, { params }) {
+export async function GET(request, { params }) {
   try {
     await connectToDB();
     const replies = await Reply.find({ comment: params.commentId })
