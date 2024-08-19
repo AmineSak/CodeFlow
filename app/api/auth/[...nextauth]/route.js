@@ -26,23 +26,26 @@ const authOptions = {
 
       return session;
     },
-
-    async signIn({ user }) {
+    async signIn({ account, profile, user, credentials }) {
       try {
         await connectToDB();
 
-        const userExists = await User?.findOne({ email: user.email });
+        // check if user already exists
+        const userExists = await User.findOne({ email: profile.email });
 
+        // if not, create a new document and save user in MongoDB
         if (!userExists) {
           await User.create({
-            email: user.email,
-            username: user.name,
-            image: user.picture,
+            email: profile.email,
+            username: profile.name,
+            image: profile.picture,
           });
         }
+
         return true;
       } catch (error) {
-        console.log(error);
+        console.log("Error checking if user exists: ", error.message);
+        return false;
       }
     },
   },
