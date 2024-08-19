@@ -71,7 +71,7 @@ export async function PATCH(req, { params }) {
 
     await commentToUpdate.save();
 
-    const url = new URL(request.url);
+    const url = new URL(req.url);
     const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
 

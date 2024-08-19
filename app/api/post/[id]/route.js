@@ -73,6 +73,9 @@ export async function PATCH(request, { params }) {
     }
 
     await postToUpdate.save();
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
+    revalidatePath(path);
 
     return NextResponse.json(postToUpdate, { status: 200 });
   } catch (error) {
