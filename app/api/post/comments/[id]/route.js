@@ -71,6 +71,10 @@ export async function PATCH(req, { params }) {
 
     await commentToUpdate.save();
 
+    const url = new URL(request.url);
+    const path = url.searchParams.get("path") || "/";
+    revalidatePath(path);
+
     return NextResponse.json(commentToUpdate, { status: 200 });
   } catch (error) {
     console.error("Failed to update comment:", error);
