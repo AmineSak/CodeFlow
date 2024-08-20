@@ -69,7 +69,7 @@ export async function PATCH(req, { params }) {
       commentToUpdate.votes.push({ userId, vote: voteValue });
     }
 
-    await commentToUpdate.save();
+    await Promise.allSettled([commentToUpdate.save(), userVote.save()]);
 
     const url = new URL(req.url);
     const path = url.searchParams.get("path") || "/";

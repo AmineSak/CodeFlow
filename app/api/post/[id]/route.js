@@ -72,7 +72,8 @@ export async function PATCH(request, { params }) {
       postToUpdate.votes.push({ userId, vote: voteValue });
     }
 
-    await postToUpdate.save();
+    await Promise.allSettled([postToUpdate.save(), userVote.save()]);
+
     const url = new URL(request.url);
     const path = url.searchParams.get("path") || "/";
     revalidatePath(path);
