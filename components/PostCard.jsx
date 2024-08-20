@@ -9,10 +9,10 @@ import { useSession } from "next-auth/react";
 const PostCard = ({ post }) => {
   const { data: session } = useSession();
 
-  // const [postUpVotes, setpostUpVotes] = useState(post.upvotes);
+  const [postUpVotes, setpostUpVotes] = useState(post.upvotes);
 
   const handleDownVote = async () => {
-    // const updatedUpVotes = postUpVotes - 1;
+    const updatedUpVotes = postUpVotes - 1;
 
     setpostUpVotes((prev) => prev - 1);
 
@@ -20,7 +20,7 @@ const PostCard = ({ post }) => {
       const response = await fetch(`/api/post/${post._id}`, {
         method: "PATCH",
         body: JSON.stringify({
-          // upvotes: updatedUpVotes,
+          upvotes: updatedUpVotes,
           userId: session?.user.id,
           voteValue: -1,
         }),
@@ -37,7 +37,7 @@ const PostCard = ({ post }) => {
     }
   };
   const handleUpVote = async () => {
-    // const updatedUpVotes = postUpVotes + 1;
+    const updatedUpVotes = postUpVotes + 1;
 
     setpostUpVotes((prev) => prev + 1);
 
@@ -45,7 +45,7 @@ const PostCard = ({ post }) => {
       const response = await fetch(`/api/post/${post._id}`, {
         method: "PATCH",
         body: JSON.stringify({
-          // upvotes: updatedUpVotes,
+          upvotes: updatedUpVotes,
           userId: session?.user.id,
           voteValue: 1,
         }),
@@ -90,7 +90,7 @@ const PostCard = ({ post }) => {
             className="hover:bg-[#80808080] rounded-md cursor-pointer "
           />
           <p className="font-sourceCodePro text-sm text-center">
-            {post.upvotes}
+            {postUpVotes}
           </p>
           <Image
             src="/assets/icons/down.svg"
