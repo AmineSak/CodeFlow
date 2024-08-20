@@ -32,8 +32,8 @@ export async function PATCH(req, { params }) {
   try {
     const { upvotes, userId, voteValue } = await req.json();
     await connectToDB();
-
     const commentToUpdate = await Comment.findById(params.id);
+
     if (!commentToUpdate) {
       return NextResponse.json({ error: "Comment not found" }, { status: 404 });
     }
@@ -46,7 +46,6 @@ export async function PATCH(req, { params }) {
       if (voteValue > 0) {
         if (userVote.vote <= 0) {
           userVote.vote++;
-          commentToUpdate.upvotes = upvotes;
         } else {
           return NextResponse.json(
             { error: "User reached max votes" },
@@ -56,7 +55,6 @@ export async function PATCH(req, { params }) {
       } else {
         if (userVote.vote >= 0) {
           userVote.vote--;
-          commentToUpdate.upvotes = upvotes;
         } else {
           return NextResponse.json(
             { error: "User reached max votes" },
@@ -66,12 +64,14 @@ export async function PATCH(req, { params }) {
       }
     } else {
       // Add a new vote if the user hasn't voted yet
-
       commentToUpdate.votes.push({ userId, vote: voteValue });
-      commentToUpdate.upvotes = upvotes + voteValue;
     }
+    commentToUpdate.upvotes = commentToUpdate.votes.reduce(
+      (total, vote) => total + vote.vote,
+      0
+    );
 
-    await Promise.allSettled([commentToUpdate.save(), userVote.save()]);
+    await commentToUpdate.save();
 
     const url = new URL(req.url);
     const path = url.searchParams.get("path") || "/";
