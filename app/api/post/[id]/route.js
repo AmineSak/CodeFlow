@@ -70,6 +70,7 @@ export async function PATCH(request, { params }) {
     } else {
       // Add a new vote if the user hasn't voted yet
       postToUpdate.votes.push({ userId, vote: voteValue });
+      postToUpdate.upvotes = upvotes + voteValue;
     }
 
     await Promise.allSettled([postToUpdate.save(), userVote.save()]);

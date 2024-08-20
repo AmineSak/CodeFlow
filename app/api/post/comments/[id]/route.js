@@ -66,7 +66,9 @@ export async function PATCH(req, { params }) {
       }
     } else {
       // Add a new vote if the user hasn't voted yet
+
       commentToUpdate.votes.push({ userId, vote: voteValue });
+      commentToUpdate.upvotes = upvotes + voteValue;
     }
 
     await Promise.allSettled([commentToUpdate.save(), userVote.save()]);
