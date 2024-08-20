@@ -33,7 +33,7 @@ export async function GET(request, { params }) {
 // PATCH request to update a post's upvotes and votes
 export async function PATCH(request, { params }) {
   try {
-    const { upvotes, userId, voteValue } = await request.json();
+    const { userId, voteValue } = await request.json();
     await connectToDB();
     const postToUpdate = await Post.findById(params.id);
 
@@ -49,7 +49,7 @@ export async function PATCH(request, { params }) {
       if (voteValue > 0) {
         if (userVote.vote <= 0) {
           userVote.vote++;
-          postToUpdate.upvotes = upvotes;
+          postToUpdate.upvotes = postToUpdate.upvotes + voteValue;
         } else {
           return NextResponse.json(
             { error: "User reached max votes" },
@@ -59,7 +59,7 @@ export async function PATCH(request, { params }) {
       } else {
         if (userVote.vote >= 0) {
           userVote.vote--;
-          postToUpdate.upvotes = upvotes;
+          postToUpdate.upvotes = postToUpdate.upvotes + voteValue;
         } else {
           return NextResponse.json(
             { error: "User reached max votes" },
@@ -70,10 +70,10 @@ export async function PATCH(request, { params }) {
     } else {
       // Add a new vote if the user hasn't voted yet
       postToUpdate.votes.push({ userId, vote: voteValue });
-      postToUpdate.upvotes = upvotes + voteValue;
+      postToUpdate.upvotes = postToUpdate.upvotes + voteValue;
     }
 
-    await Promise.allSettled([postToUpdate.save(), userVote.save()]);
+    await postToUpdate.save();
 
     const url = new URL(request.url);
     const path = url.searchParams.get("path") || "/";
