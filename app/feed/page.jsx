@@ -4,7 +4,7 @@ import Nav from "@/components/Nav";
 import WelcomeMessage from "@/components/WelcomeMessage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-
+import Leaderboard from "@/components/animations/Leaderboard";
 const Feed = () => {
   const { data: session } = useSession();
 
@@ -16,6 +16,7 @@ const Feed = () => {
         {" "}
         <Link href="/create-post">Create Post</Link>
       </button>
+      <Leaderboard />
     </>
   );
 };

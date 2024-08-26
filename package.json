@@ -27,6 +27,7 @@
     "clsx": "^2.1.1",
     "codemirror": "^6.0.1",
     "framer-motion": "^11.3.24",
+    "lottie-react": "^2.4.0",
     "lucide-react": "^0.419.0",
     "mailersend": "^2.2.0",
     "mini-svg-data-uri": "^1.4.4",
