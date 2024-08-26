@@ -81,7 +81,7 @@
 }
 
 .app {
-  @apply relative z-10 flex justify-center items-center flex-col mx-auto max-w-7xl sm:px-16;
+  @apply relative z-10 flex justify-center items-center flex-col mx-auto max-w-7xl sm:px-16 px-6;
 }
 
 .login_btn {

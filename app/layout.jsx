@@ -19,7 +19,7 @@ const RootLayout = ({ children }) => {
           <Provider>
             <div className="main bg-[#1E1E1E]"></div>
 
-            <main className="app">{children}</main>
+            <main className="app dark">{children}</main>
           </Provider>
         </NextProviders>
       </body>

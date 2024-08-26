@@ -18,7 +18,7 @@ const Comments = ({ postId }) => {
   }, []);
 
   return (
-    <div className="flex-between relative z-0 flex-col gap-8">
+    <div className="flex-between relative w-full z-0 flex-col gap-8">
       {" "}
       {comments.map((comment) => (
         <CommentCard key={comment._id} comment={comment} />

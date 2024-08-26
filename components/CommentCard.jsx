@@ -119,8 +119,8 @@ const CommentCard = ({ comment }) => {
   };
 
   return (
-    <div className="glassmorphism max-w-full w-[640px] text-white text-3xl">
-      <div className="flex-between w-[640px] max-w-full">
+    <div className="glassmorphism w-full text-white text-3xl">
+      <div className="flex-between w-full ">
         <div className="flex-between gap-3">
           <Image
             src={comment.creator?.image}

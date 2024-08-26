@@ -63,8 +63,8 @@ const PostCard = ({ post }) => {
   };
 
   return (
-    <div className="glassmorphism max-w-full w-full text-white text-3xl">
-      <div className="flex-between gap-[400px] w-full max-w-full">
+    <div className="glassmorphism w-full text-white text-3xl">
+      <div className="flex-between w-full">
         <div className="flex-between gap-3">
           <Image
             src={post.creator?.image}

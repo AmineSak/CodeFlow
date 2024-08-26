@@ -7,7 +7,7 @@ import { Search } from "lucide-react";
 
 const PostCardList = ({ data }) => {
   return (
-    <div className="fle flex-col flex-between gap-8 max-w-[640px]">
+    <div className="flex flex-col flex-between gap-8 w-full ">
       {data.map((post) => (
         <PostCard key={post._id} post={post} />
       ))}
@@ -54,7 +54,7 @@ const Feed = () => {
   }, []);
 
   return (
-    <div className="flex-between flex-col">
+    <div className="flex-between flex-col w-[75%]">
       <form className="relative">
         <Input
           classNames={{
